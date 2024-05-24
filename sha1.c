@@ -6,6 +6,22 @@
 #define SHA1_K40 0x8f1bbcdc
 #define SHA1_K60 0xca62c1d6
 
+
+union _buffer {
+  uint8_t b[BLOCK_LENGTH];
+  uint32_t w[BLOCK_LENGTH/4];
+} buffer;
+union _state {
+  uint8_t b[HASH_LENGTH];
+  uint32_t w[HASH_LENGTH/4];
+} state;
+
+uint8_t bufferOffset;
+uint32_t byteCount;
+uint8_t keyBuffer[BLOCK_LENGTH];
+uint8_t innerHash[HASH_LENGTH];
+
+
 uint8_t sha1InitState[] = {
   0x01,0x23,0x45,0x67, // H0
   0x89,0xab,0xcd,0xef, // H1
@@ -84,7 +100,7 @@ void writeArray(uint8_t *buffer, uint8_t size){
 }
 
 void pad() {
-  // Implement SHA-1 padding (fips180-2 Åò5.1.1)
+  // Implement SHA-1 padding (fips180-2 ÔøΩÔøΩ5.1.1)
 
   // Pad with 0x80 followed by 0x00 until the end of the block
   addUncounted(0x80);
